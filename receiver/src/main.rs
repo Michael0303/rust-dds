@@ -9,12 +9,19 @@ struct Message {
 
 
 fn listen(socket: &UdpSocket, mut buf: &mut [u8]) -> usize {
+    let mut bytes: [u8; 8] = [0; 8];
+    let (num_of_bytes, src_ip) = socket.recv_from(&mut bytes).expect("not receiving data");
+    let len = usize::from_ne_bytes(bytes);
     let (num_of_bytes, src_ip) = socket.recv_from(&mut buf).expect("not receiving data");
     println!("recv {} bytes from {}", num_of_bytes, src_ip);
-    num_of_bytes
+    len
 }
 
 fn send(socket: &UdpSocket, msg: &[u8], sender: &str) -> usize {
+    let len: usize = msg.len();
+    let bytes = len.to_ne_bytes();
+    let result = socket.send_to(&bytes, sender).expect("sending length error");
+
     let result = socket.send_to(&msg, sender).expect("sending data error");
     println!("sending {} bytes to {}", result, sender);
     result
@@ -43,12 +50,13 @@ fn main() {
 
     println!("start receiving");
     loop {
-        listen(&socket, &mut buf);
+        let len = listen(&socket, &mut buf);
+        let buf = &mut buf[..len];
         println!("recv message below:");
         let msg = std::str::from_utf8(&buf).unwrap();
         println!("{}", msg);
 
-        let msg = String::from("Hi, I'm receiver.");
+        let msg = String::from("Ok");
         let msg = msg.as_bytes();
         send(&socket, &msg, &sender);
     }
