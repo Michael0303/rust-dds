@@ -1,6 +1,6 @@
 use std::net::{UdpSocket};
 use std::env;
-
+use protocol;
 struct Message {
     id: u32,
     name: String,
@@ -10,21 +10,28 @@ struct Message {
 
 fn listen(socket: &UdpSocket, mut buf: &mut [u8]) -> usize {
     let mut bytes: [u8; 8] = [0; 8];
-    let (num_of_bytes, src_ip) = socket.recv_from(&mut bytes).expect("not receiving data");
+    socket.recv_from(&mut bytes).expect("not receiving data");
     let len = usize::from_ne_bytes(bytes);
-    let (num_of_bytes, src_ip) = socket.recv_from(&mut buf).expect("not receiving data");
-    println!("recv {} bytes from {}", num_of_bytes, src_ip);
+    let mut byte_count = 0;
+    while byte_count < len {
+        let (num_of_bytes, src_ip) = socket.recv_from(&mut buf).expect("not receiving data");
+        println!("recv {} bytes from {}", num_of_bytes, src_ip);
+        byte_count += num_of_bytes;
+    }
     len
 }
 
 fn send(socket: &UdpSocket, msg: &[u8], sender: &str) -> usize {
     let len: usize = msg.len();
     let bytes = len.to_ne_bytes();
-    let result = socket.send_to(&bytes, sender).expect("sending length error");
-
-    let result = socket.send_to(&msg, sender).expect("sending data error");
-    println!("sending {} bytes to {}", result, sender);
-    result
+    socket.send_to(&bytes, sender).expect("sending length error");
+    let mut byte_count = 0;
+    while byte_count < len {
+        let num_of_bytes = socket.send_to(&msg, sender).expect("sending data error");
+        println!("sending {} bytes to {}", num_of_bytes, sender);
+        byte_count += num_of_bytes;
+    }
+    len
 }
 
 fn init(sender_port: &str, receiver_port: &str) -> (String, String, UdpSocket) {
@@ -60,5 +67,5 @@ fn main() {
         let msg = msg.as_bytes();
         send(&socket, &msg, &sender);
     }
-    
+    protocol::somefn();
 }
