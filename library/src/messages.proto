@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package library.message;
+
+// A message test
+message Msg {
+  enum PlayerType {
+    GOALKEEPER = 0;
+    STRIKER = 1;
+    DEFENDER = 2;
+  }
+  string name = 1;
+  int32 id = 2;
+  double testdata = 3;
+}
