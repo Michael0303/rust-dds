@@ -1,0 +1,10 @@
+/home/newslab/rust_practice/ws/library/target/rls/debug/deps/async_global_executor-a38d76eecff2eb56.rmeta: /home/newslab/.cargo/registry/src/github.com-1ecc6299db9ec823/async-global-executor-2.0.4/src/lib.rs /home/newslab/.cargo/registry/src/github.com-1ecc6299db9ec823/async-global-executor-2.0.4/src/config.rs /home/newslab/.cargo/registry/src/github.com-1ecc6299db9ec823/async-global-executor-2.0.4/src/executor.rs /home/newslab/.cargo/registry/src/github.com-1ecc6299db9ec823/async-global-executor-2.0.4/src/init.rs /home/newslab/.cargo/registry/src/github.com-1ecc6299db9ec823/async-global-executor-2.0.4/src/reactor.rs /home/newslab/.cargo/registry/src/github.com-1ecc6299db9ec823/async-global-executor-2.0.4/src/threading.rs
+
+/home/newslab/rust_practice/ws/library/target/rls/debug/deps/async_global_executor-a38d76eecff2eb56.d: /home/newslab/.cargo/registry/src/github.com-1ecc6299db9ec823/async-global-executor-2.0.4/src/lib.rs /home/newslab/.cargo/registry/src/github.com-1ecc6299db9ec823/async-global-executor-2.0.4/src/config.rs /home/newslab/.cargo/registry/src/github.com-1ecc6299db9ec823/async-global-executor-2.0.4/src/executor.rs /home/newslab/.cargo/registry/src/github.com-1ecc6299db9ec823/async-global-executor-2.0.4/src/init.rs /home/newslab/.cargo/registry/src/github.com-1ecc6299db9ec823/async-global-executor-2.0.4/src/reactor.rs /home/newslab/.cargo/registry/src/github.com-1ecc6299db9ec823/async-global-executor-2.0.4/src/threading.rs
+
+/home/newslab/.cargo/registry/src/github.com-1ecc6299db9ec823/async-global-executor-2.0.4/src/lib.rs:
+/home/newslab/.cargo/registry/src/github.com-1ecc6299db9ec823/async-global-executor-2.0.4/src/config.rs:
+/home/newslab/.cargo/registry/src/github.com-1ecc6299db9ec823/async-global-executor-2.0.4/src/executor.rs:
+/home/newslab/.cargo/registry/src/github.com-1ecc6299db9ec823/async-global-executor-2.0.4/src/init.rs:
+/home/newslab/.cargo/registry/src/github.com-1ecc6299db9ec823/async-global-executor-2.0.4/src/reactor.rs:
+/home/newslab/.cargo/registry/src/github.com-1ecc6299db9ec823/async-global-executor-2.0.4/src/threading.rs:
