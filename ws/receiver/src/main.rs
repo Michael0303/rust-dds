@@ -1,24 +1,20 @@
-use std::env;
-use library::net_protocol::{init, listen, send, Who};
-use library::{serialize, deserialize, messages};
+use library::net_protocol::Connection;
 
-fn main() {
-    let args: Vec<String> = env::args().collect();
-    let sender_port = &args[1];
-    let receiver_port = &args[2];
-    let (sender, receiver, socket) = init(sender_port, receiver_port, Who::Receiver);
-    
-    let mut buf = [0; 100];
-    println!("start receiving");
+#[async_std::main]
+async fn main() {
+    let futures = vec![
+        receiving_task(),
+    ];
+
+    futures::future::join_all(futures).await;
+}
+
+async fn receiving_task() {
+    let mut conn = Connection::new("127.0.0.1:3333", true).await;
+    println!("Listening on {}", conn.socket.local_addr().unwrap());
     loop {
-        let len = listen(&socket, &mut buf);
-        let buf = &mut buf[..len];
+        let msg = conn.recv_from().await;
         println!("recv message below:");
-        let msg = deserialize(buf).unwrap();
         println!("{:#?}", msg);
-
-        let msg = String::from("Ok");
-        let msg = msg.as_bytes();
-        send(&socket, &msg, &sender);
     }
 }

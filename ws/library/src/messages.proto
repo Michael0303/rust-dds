@@ -12,4 +12,5 @@ message Msg {
   string name = 1;
   int32 id = 2;
   double testdata = 3;
+  string from = 4;
 }
