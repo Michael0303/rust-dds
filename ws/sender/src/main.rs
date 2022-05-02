@@ -4,7 +4,6 @@ use library::messages::Msg;
 use async_std::task::sleep;
 use std::time::Duration;
 
-
 #[async_std::main]
 async fn main() {
     let futures = vec![
@@ -16,16 +15,21 @@ async fn main() {
 }
 
 async fn sending_task(index: i32) {
-    let mut conn = Connection::new("127.0.0.1:3333", false).await;
+    println!("please enter remote IpAddr:");
+    let mut line = String::new();
+    io::stdin().read_line(&mut line).expect("read addr error!");
+    let addr = String::from(line.trim());
+    println!("{}", addr);
+    let mut conn = Connection::new(addr, false).await;
     println!("my socket port is {}", conn.socket.local_addr().unwrap());
-    println!("start receiving");
+    println!("start sending");
     
     loop {
         let mut line = String::new();
         println!("please enter sending message.");
         io::stdin().read_line(&mut line).expect("read line error!");
         let line = String::from(line.trim());
-        socket_addr = conn.socket.local_addr().unwrap().parse();
+        let socket_addr = conn.socket.local_addr().unwrap().to_string();
         let msg = Msg {
             id: index,
             name: line,
@@ -33,7 +37,7 @@ async fn sending_task(index: i32) {
             from: String::from(socket_addr),
         };
         conn.send(&msg).await;
-        sleep(Duration::from_secs(10)).await;
+        sleep(Duration::from_secs(5)).await;
     }
     
 }

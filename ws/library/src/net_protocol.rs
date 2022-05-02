@@ -8,17 +8,19 @@ pub struct Connection {
     pub socket: UdpSocket,
 }
 
+
 impl Connection {
     pub async fn new<A>(addr: A, server: bool) -> Self
     where
         A: ToSocketAddrs
     {
-        let mut addr_iter = addr.to_socket_addrs().await.unwrap();
+        let mut addr_iter = addr.to_socket_addrs().await.expect("err here!");
         let addr = addr_iter.next().unwrap();
         assert!(addr_iter.next().is_none(), "only one address is allowed");
-        let mut bind_addr = "127.0.0.1:0";
+        let mut bind_addr_iter = "127.0.0.1:0".to_socket_addrs().await.unwrap();
+        let mut bind_addr = bind_addr_iter.next().unwrap();
         if server {
-            bind_addr = "127.0.0.1:3333" ;
+            bind_addr = addr;
         }
         let socket = UdpSocket::bind(bind_addr).await.unwrap();
         if !server {
