@@ -7,6 +7,6 @@ edition = "2018"
 
 [dependencies]
 library = {path = "../library"}
-async-std = { version = "1.11.0", features = ["attributes"] }
+async-std = { version = "=1.11.0", features = ["attributes"] }
 futures = "0.3.21"
-# zenoh = { git = "https://github.com/eclipse-zenoh/zenoh.git" }
+zenoh = { git = "https://github.com/eclipse-zenoh/zenoh.git", commit = "c977c4f78a155828352ce8a6e77e1b211af8db95"}
