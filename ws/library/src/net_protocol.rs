@@ -151,3 +151,14 @@ impl Connection {
     }
 
 }
+
+pub fn encode(msg: Msg) -> Vec<u8> {
+    let mut buf = Vec::with_capacity(msg.encoded_len());
+    msg.encode(&mut buf).unwrap();
+    buf
+}
+
+pub fn decode(msg_bytes: Vec<u8>) -> Msg {
+    let msg = Msg::decode(msg_bytes.as_slice()).unwrap();
+    msg
+}

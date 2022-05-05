@@ -4,4 +4,5 @@ members = [
     "sender",
     "receiver",
     "library",
+    "z_server",
 ]

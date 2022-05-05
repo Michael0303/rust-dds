@@ -2534,6 +2534,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "z_server"
+version = "0.1.0"
+dependencies = [
+ "async-std",
+ "futures",
+ "library",
+ "zenoh",
+]
+
+[[package]]
 name = "zenoh"
 version = "0.6.0-dev.0"
 source = "git+https://github.com/eclipse-zenoh/zenoh.git#c977c4f78a155828352ce8a6e77e1b211af8db95"
