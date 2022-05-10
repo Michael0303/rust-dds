@@ -1,6 +1,6 @@
 use futures::prelude::*;
 use zenoh::prelude::*;
-use library::net_protocol::{Connection, encode, decode};
+use library::net_protocol::decode;
 
 #[async_std::main]
 async fn main() {

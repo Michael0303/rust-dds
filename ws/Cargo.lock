@@ -2534,6 +2534,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "z_router"
+version = "0.1.0"
+dependencies = [
+ "async-std",
+ "futures",
+ "library",
+ "zenoh",
+]
+
+[[package]]
 name = "z_server"
 version = "0.1.0"
 dependencies = [
