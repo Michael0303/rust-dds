@@ -1,9 +1,21 @@
 use library::net_protocol::{Connection, encode, decode};
-use zenoh::{prelude::*, Session};
+use zenoh::Session;
+use std::fs;
+use std::str::FromStr;
 
 #[async_std::main]
 async fn main() {
-    let session = zenoh::open(config::default()).await.unwrap();  
+    use zenoh::config::{ConnectConfig, EndPoint};
+    let filename = "router_config";
+    let routerip = fs::read_to_string(filename)
+        .expect("Something went wrong reading the file");
+    println!("zenoh_router IpAddr is {}", routerip);
+    let mut config = zenoh::config::default();
+    config
+        .set_connect(ConnectConfig {
+            endpoints: vec![EndPoint::from_str(&routerip).expect("router IpAddr error!")],
+        });
+    let session = zenoh::open(config).await.unwrap();  
     let futures = vec![
         receiving_task(&session),
     ];
