@@ -1,14 +1,14 @@
-use std::io;
-use library::net_protocol::Connection;
-use library::messages::Msg;
 use async_std::task::sleep;
+use library::messages::Msg;
+use library::net_protocol::Connection;
+use std::io;
 use std::time::Duration;
 
 #[async_std::main]
 async fn main() {
     let futures = vec![
         sending_task(1),
-        sending_task(2),
+        // sending_task(2),
     ];
 
     futures::future::join_all(futures).await;
@@ -23,7 +23,7 @@ async fn sending_task(index: i32) {
     let mut conn = Connection::new(addr, false).await;
     println!("my socket port is {}", conn.socket.local_addr().unwrap());
     println!("start sending");
-    
+
     loop {
         let mut line = String::new();
         println!("please enter sending message.");
@@ -39,5 +39,4 @@ async fn sending_task(index: i32) {
         conn.send(&msg).await;
         sleep(Duration::from_secs(5)).await;
     }
-    
 }
