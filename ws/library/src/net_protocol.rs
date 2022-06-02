@@ -1,5 +1,5 @@
-use async_std::net::{UdpSocket};
 use async_std::net::ToSocketAddrs;
+use async_std::net::UdpSocket;
 use prost::Message;
 
 use crate::messages::Msg;
@@ -8,11 +8,10 @@ pub struct Connection {
     pub socket: UdpSocket,
 }
 
-
 impl Connection {
     pub async fn new<A>(addr: A, server: bool) -> Self
     where
-        A: ToSocketAddrs
+        A: ToSocketAddrs,
     {
         let mut addr_iter = addr.to_socket_addrs().await.expect("err here!");
         let addr = addr_iter.next().unwrap();
@@ -26,11 +25,8 @@ impl Connection {
         if !server {
             socket.connect(addr).await.unwrap();
         }
-        Self {
-            socket,
-        }
+        Self { socket }
     }
-    
 
     pub async fn send(&mut self, msg: &Msg) {
         let msg_bytes: Vec<u8> = {
@@ -41,24 +37,28 @@ impl Connection {
         let len: u64 = msg_bytes.len() as u64;
         let len_bytes = len.to_le_bytes();
 
-
         let mut len_bytes = len_bytes.as_slice();
         while !len_bytes.is_empty() {
-            let sent_len = self.socket.send(&len_bytes).await.expect("sending length error");
+            let sent_len = self
+                .socket
+                .send(&len_bytes)
+                .await
+                .expect("sending length error");
             len_bytes = &len_bytes[sent_len..];
         }
 
         let mut msg_bytes = msg_bytes.as_slice();
         while !msg_bytes.is_empty() {
-            let sent_len = self.socket.send(&msg_bytes).await.expect("sending length error");
+            let sent_len = self
+                .socket
+                .send(&msg_bytes)
+                .await
+                .expect("sending length error");
             msg_bytes = &msg_bytes[sent_len..];
         }
-        
     }
 
-
     pub async fn recv(&mut self) -> Msg {
-        
         let msg_len = {
             let mut len_bytes = [0u8; 8];
             let mut slice = len_bytes.as_mut_slice();
@@ -67,7 +67,6 @@ impl Connection {
                 slice = &mut slice[len..];
             }
 
-
             u64::from_le_bytes(len_bytes)
         };
 
@@ -75,14 +74,14 @@ impl Connection {
 
         let msg_bytes: Vec<u8> = {
             let mut msg_bytes = vec![0u8; msg_len as usize];
-            
+
             let mut slice = msg_bytes.as_mut_slice();
-            
+
             while !slice.is_empty() {
                 let len = self.socket.recv(slice).await.unwrap();
                 slice = &mut slice[len..];
             }
-            
+
             msg_bytes
         };
 
@@ -90,9 +89,9 @@ impl Connection {
         msg
     }
 
-    pub async fn send_to<A>(&mut self, msg: &Msg, addr: &A) 
+    pub async fn send_to<A>(&mut self, msg: &Msg, addr: &A)
     where
-        A: ToSocketAddrs
+        A: ToSocketAddrs,
     {
         let msg_bytes: Vec<u8> = {
             let mut buf = Vec::with_capacity(msg.encoded_len());
@@ -102,23 +101,28 @@ impl Connection {
         let len: u64 = msg_bytes.len() as u64;
         let len_bytes = len.to_le_bytes();
 
-
         let mut len_bytes = len_bytes.as_slice();
         while !len_bytes.is_empty() {
-            let sent_len = self.socket.send_to(&len_bytes, addr).await.expect("sending length error");
+            let sent_len = self
+                .socket
+                .send_to(&len_bytes, addr)
+                .await
+                .expect("sending length error");
             len_bytes = &len_bytes[sent_len..];
         }
 
         let mut msg_bytes = msg_bytes.as_slice();
         while !msg_bytes.is_empty() {
-            let sent_len = self.socket.send_to(&msg_bytes, addr).await.expect("sending length error");
+            let sent_len = self
+                .socket
+                .send_to(&msg_bytes, addr)
+                .await
+                .expect("sending length error");
             msg_bytes = &msg_bytes[sent_len..];
         }
-        
     }
 
     pub async fn recv_from(&mut self) -> Msg {
-        
         let msg_len = {
             let mut len_bytes = [0u8; 8];
             let mut slice = len_bytes.as_mut_slice();
@@ -126,39 +130,47 @@ impl Connection {
                 let (len, _) = self.socket.recv_from(slice).await.unwrap();
                 slice = &mut slice[len..];
             }
-    
-    
+
             u64::from_le_bytes(len_bytes)
         };
-    
+
         assert!(msg_len <= 0x1000, "message is too large");
-    
+
         let msg_bytes: Vec<u8> = {
             let mut msg_bytes = vec![0u8; msg_len as usize];
-            
+
             let mut slice = msg_bytes.as_mut_slice();
-            
+
             while !slice.is_empty() {
                 let (len, _) = self.socket.recv_from(slice).await.unwrap();
                 slice = &mut slice[len..];
             }
-            
+
             msg_bytes
         };
-    
+
         let msg = Msg::decode(msg_bytes.as_slice()).unwrap();
         msg
     }
-
 }
 
-pub fn encode(msg: Msg) -> Vec<u8> {
-    let mut buf = Vec::with_capacity(msg.encoded_len());
-    msg.encode(&mut buf).unwrap();
+// pub fn encode(msg: Msg) -> Vec<u8> {
+//     let mut buf = Vec::with_capacity(msg.encoded_len());
+//     msg.encode(&mut buf).unwrap();
+//     buf
+// }
+
+// pub fn decode(msg_bytes: Vec<u8>) -> Msg {
+//     let msg = Msg::decode(msg_bytes.as_slice()).unwrap();
+//     msg
+// }
+
+pub fn encode(msg: &str) -> Vec<u8> {
+    let buf = msg.as_bytes().to_vec();
     buf
 }
 
-pub fn decode(msg_bytes: Vec<u8>) -> Msg {
-    let msg = Msg::decode(msg_bytes.as_slice()).unwrap();
+pub fn decode(msg_bytes: Vec<u8>) -> String {
+    let msg = String::from_utf8(msg_bytes).unwrap();
     msg
 }

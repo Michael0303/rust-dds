@@ -1,3 +1,4 @@
+use async_std::os::unix::net::UnixStream;
 use async_std::task::sleep;
 use library::messages::Msg;
 use library::net_protocol::Connection;
@@ -21,10 +22,14 @@ async fn sending_task(index: i32) {
     let addr = String::from(line.trim());
     println!("{}", addr);
     let mut conn = Connection::new(addr, false).await;
-    println!("my socket port is {}", conn.socket.local_addr().unwrap());
-    println!("start sending");
+
+    // println!("my socket port is {}", conn.socket.local_addr().unwrap());
+    // println!("start sending");
 
     loop {
+        let mut stream = UnixStream::connect("/tmp/robocup").await?;
+        stream.write_all(b"hello world")?;
+
         let mut line = String::new();
         println!("please enter sending message.");
         io::stdin().read_line(&mut line).expect("read line error!");
