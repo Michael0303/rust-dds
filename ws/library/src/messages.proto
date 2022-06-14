@@ -2,15 +2,58 @@ syntax = "proto3";
 
 package library.message;
 
-// A message test
-message Msg {
-  enum PlayerType {
-    GOALKEEPER = 0;
-    STRIKER = 1;
-    DEFENDER = 2;
-  }
-  string name = 1;
-  int32 id = 2;
-  double testdata = 3;
-  string from = 4;
+message Joint {
+  float HeadYaw = 1;
+  float HeadPitch = 2; 
+  float LShoulderPitch = 3; 
+  float LShoulderRoll = 4; 
+  float LElbowYaw = 5; 
+  float LElbowRoll = 6; 
+  float LWristYaw = 7; 
+  float LHipYawPitch = 8; 
+  float LHipRoll = 9; 
+  float LHipPitch = 10; 
+  float LKneePitch = 11; 
+  float LAnklePitch = 12; 
+  float LAnkleRoll = 13;
+  float RHipRoll = 14; 
+  float RHipPitch = 16; 
+  float RKneePitch = 17; 
+  float RAnklePitch = 18; 
+  float RAnkleRoll = 19; 
+  float RShoulderPitch = 20; 
+  float RShoulderRoll = 21; 
+  float RElbowYaw = 22; 
+  float RElbowRoll = 23; 
+  float RWristYaw = 24; 
+  float LHand = 25; 
+  float RHand = 26; 
+}
+
+message Sonar {
+  float Left = 1;
+  float Right = 2;
+}
+
+message Touch {
+  float ChestBoard_Button = 1; 
+  float Head_Touch_Front = 2; 
+  float Head_Touch_Middle = 3; 
+  float Head_Touch_Rear = 4; 
+  float LFoot_Bumper_Left = 5; 
+  float LFoot_Bumper_Right = 6; 
+  float LHand_Touch_Back = 7; 
+  float LHand_Touch_Left = 8; 
+  float LHand_Touch_Right = 9; 
+  float RFoot_Bumper_Left = 10; 
+  float RFoot_Bumper_Right = 11; 
+  float RHand_Touch_Back = 12; 
+  float RHand_Touch_Left = 13; 
+  float RHand_Touch_Right = 14;
+}
+
+message Robot {
+  Joint joints = 1;
+  Sonar sonars = 2;
+  Touch touchs = 3;
 }

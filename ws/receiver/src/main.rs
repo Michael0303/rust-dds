@@ -1,6 +1,10 @@
-use library::net_protocol::{decode, encode, Connection};
+use async_std::os::unix::net::{UnixListener, UnixStream};
+use async_std::prelude::*;
+use futures::TryFutureExt;
+// use library::net_protocol::{decode, Connection};
+// use rmps::{Deserializer, Serializer};
+// use serde::{Deserialize, Serialize};
 use std::fs;
-use async_std::os::unix::net::UnixStream;;
 use std::str::FromStr;
 use zenoh::Session;
 
@@ -20,18 +24,23 @@ async fn main() {
     session.close().await.unwrap();
 }
 
-async fn receiving_task(session: &Session) {
-    let mut conn = Connection::new("127.0.0.1:3333", true).await;
-    println!("Listening on {}", conn.socket.local_addr().unwrap());
-    loop {
-        let mut stream = UnixStream::connect("/tmp/robocup").await?;
-        // let msg = conn.recv_from().await;
-        let mut msg_stream = String::new();
-        stream.read_to_string(&mut msg_stream)?;
-        // println!("recv message below:");
-        // println!("{:#?}", msg_stream);
-        let msg = encode(msg);
-        // println!("{:#?}", msg);
-        session.put("/key/robot_msg", msg).await.unwrap();
+async fn receiving_task(session: &Session) -> async_std::io::Result<()> {
+    let listener = UnixListener::bind("/tmp/robocup")
+        .await
+        .expect("unix socket connect error!");
+    let mut incoming = listener.incoming();
+
+    while let Some(stream) = incoming.next().await {
+        let mut stream = stream?;
+        loop {
+            let mut msg_stream = vec![0; 1024];
+            let length = stream.read(&mut msg_stream).await?;
+            if length == 0 {
+                break;
+            };
+            println!("recv message");
+            session.put("/key/robot_msg", msg_stream).await.unwrap();
+        }
     }
+    Ok(())
 }

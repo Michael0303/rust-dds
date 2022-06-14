@@ -9,6 +9,7 @@ edition = "2018"
 bytes = "0.4"
 prost = "0.5"
 async-std = { version = "1.11.0", features = ["unstable"] }
+rmpv = "1.0.0"
 
 [build-dependencies]
 prost-build = "0.5"
