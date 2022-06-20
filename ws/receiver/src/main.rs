@@ -38,8 +38,8 @@ async fn receiving_task(session: &Session) -> async_std::io::Result<()> {
             if length == 0 {
                 break;
             };
-            println!("recv message");
-            session.put("/key/robot_msg", msg_stream).await.unwrap();
+            println!("recv message ");
+            // session.put("/key/robot_msg", msg_stream).await.unwrap();
         }
     }
     Ok(())

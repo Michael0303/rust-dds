@@ -42,37 +42,37 @@ async fn sending_task(index: i32) {
             break;
         }
         let line = line.as_bytes();
-        let msg = Robot {
-            joints: Joint {
-                head_yaw: todo!(),
-                head_pitch: todo!(),
-                l_shoulder_pitch: todo!(),
-                l_shoulder_roll: todo!(),
-                l_elbow_yaw: todo!(),
-                l_elbow_roll: todo!(),
-                l_wrist_yaw: todo!(),
-                l_hip_yaw_pitch: todo!(),
-                l_hip_roll: todo!(),
-                l_hip_pitch: todo!(),
-                l_knee_pitch: todo!(),
-                l_ankle_pitch: todo!(),
-                l_ankle_roll: todo!(),
-                r_hip_roll: todo!(),
-                r_hip_pitch: todo!(),
-                r_knee_pitch: todo!(),
-                r_ankle_pitch: todo!(),
-                r_ankle_roll: todo!(),
-                r_shoulder_pitch: todo!(),
-                r_shoulder_roll: todo!(),
-                r_elbow_yaw: todo!(),
-                r_elbow_roll: todo!(),
-                r_wrist_yaw: todo!(),
-                l_hand: todo!(),
-                r_hand: todo!(),
-            },
-            sonars: todo!(),
-            touchs: todo!(),
-        };
+        // let msg = Robot {
+        //     joints: Joint {
+        //         head_yaw: todo!(),
+        //         head_pitch: todo!(),
+        //         l_shoulder_pitch: todo!(),
+        //         l_shoulder_roll: todo!(),
+        //         l_elbow_yaw: todo!(),
+        //         l_elbow_roll: todo!(),
+        //         l_wrist_yaw: todo!(),
+        //         l_hip_yaw_pitch: todo!(),
+        //         l_hip_roll: todo!(),
+        //         l_hip_pitch: todo!(),
+        //         l_knee_pitch: todo!(),
+        //         l_ankle_pitch: todo!(),
+        //         l_ankle_roll: todo!(),
+        //         r_hip_roll: todo!(),
+        //         r_hip_pitch: todo!(),
+        //         r_knee_pitch: todo!(),
+        //         r_ankle_pitch: todo!(),
+        //         r_ankle_roll: todo!(),
+        //         r_shoulder_pitch: todo!(),
+        //         r_shoulder_roll: todo!(),
+        //         r_elbow_yaw: todo!(),
+        //         r_elbow_roll: todo!(),
+        //         r_wrist_yaw: todo!(),
+        //         l_hand: todo!(),
+        //         r_hand: todo!(),
+        //     },
+        //     sonars: todo!(),
+        //     touchs: todo!(),
+        // };
 
         stream.write_all(&line).await.expect("read line error!");
         // sleep(Duration::from_secs(5)).await;

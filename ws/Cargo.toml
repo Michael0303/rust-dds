@@ -5,4 +5,5 @@ members = [
     "receiver",
     "library",
     "z_server",
+    "socket",
 ]
