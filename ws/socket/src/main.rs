@@ -11,27 +11,19 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, PartialEq, Deserialize)]
 struct Test {
-    joint: joint,
-    touch: touch,
-    teset: teset,
-}
-#[derive(Debug, PartialEq, Deserialize)]
-struct joint {
-    a: f32,
-    b: f32,
-    c: f32,
-}
-#[derive(Debug, PartialEq, Deserialize)]
-struct touch {
-    a: f32,
-    b: f32,
-    c: f32,
-}
-#[derive(Debug, PartialEq, Deserialize)]
-struct teset {
-    a: f32,
-    b: String,
-    c: f32,
+    Status: [i32; 25],
+    Stiffness: [f32; 25],
+    Accelerometer: [f32; 3],
+    Battery: [f32; 4],
+    Current: [f32; 25],
+    Touch: [f32; 14],
+    FSR: [f32; 8],
+    Angles: [f32; 2],
+    Position: [f32; 25],
+    Sonar: [f32; 2],
+    RobotConfig: [String; 4],
+    Gyroscope: [f32; 3],
+    Temperature: [f32; 25],
 }
 
 #[async_std::main]
@@ -45,7 +37,7 @@ async fn sending_task() -> async_std::io::Result<()> {
         .await
         .expect("unix socket connect error!");
     loop {
-        let mut msg_stream = vec![0; 256];
+        let mut msg_stream = vec![0; 896];
         let length = stream.read(&mut msg_stream).await?;
         if length == 0 {
             break;
