@@ -1,6 +1,7 @@
-use async_std::os::unix::net::UnixStream;
+use async_std::os::unix::net::{UnixListener, UnixStream};
 use async_std::prelude::*;
 use std::net::Shutdown;
+use std::path::Path;
 
 extern crate rmp_serde as rmps;
 extern crate serde;
@@ -52,13 +53,18 @@ impl Connection {
     //     }
     //     Self { socket }
     // }
-    pub async fn new() -> Self {
-        let mut stream = UnixStream::connect("/tmp/robocup")
-            .await
-            .expect("unix socket connect error!");
+    // pub async fn new() -> Self {
+    //     let mut stream = UnixStream::connect("/tmp/robocup")
+    //         .await
+    //         .expect("unix socket connect error!");
+    //     Self { stream }
+    // }
+    pub async fn new(path: &Path) -> Self {
+        let listener = UnixListener::bind(path).await.expect("binding error");
+        let (mut stream, addr) = listener.accept().await.expect("listen error");
+        println!("Got a client: {:?} - {:?}", stream, addr);
         Self { stream }
     }
-
     pub async fn recv(&mut self) -> Msg_stream {
         let mut bytes = vec![0; 896];
         let length = self.stream.read(&mut bytes).await.unwrap();
