@@ -12,6 +12,7 @@ async-std = { version = "1.11.0", features = ["unstable"] }
 rmp-serde = "1.1.0"
 serde = "1.0"
 serde_derive = "1.0.137"
+zenoh = { git = "https://github.com/eclipse-zenoh/zenoh.git", commit = "c977c4f78a155828352ce8a6e77e1b211af8db95"}
 
 [build-dependencies]
 prost-build = "0.5"

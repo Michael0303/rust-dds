@@ -996,6 +996,7 @@ dependencies = [
  "rmp-serde",
  "serde",
  "serde_derive",
+ "zenoh",
 ]
 
 [[package]]
@@ -2079,6 +2080,7 @@ dependencies = [
  "rmp-serde",
  "serde",
  "serde_derive",
+ "zenoh",
 ]
 
 [[package]]

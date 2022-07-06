@@ -79,8 +79,24 @@ impl Connection {
     }
 }
 
-pub fn decode(msg_stream: Msg_stream) -> Msg {
-    let buf = &msg_stream.bytes[0..msg_stream.length];
+pub fn decode(msg_stream: Vec<u8>) -> Msg {
+    let buf = &msg_stream[..];
     let msg: Msg = rmps::from_slice(buf).unwrap();
     msg
+}
+
+use std::fs;
+use std::str::FromStr;
+use zenoh::config::{ConnectConfig, EndPoint};
+use zenoh::{prelude::*, Session};
+pub async fn zenoh_conn() -> Session {
+    let filename = "router_config";
+    let routerip = fs::read_to_string(filename).expect("Something went wrong reading the file");
+    println!("zenoh_router IpAddr is {}", routerip);
+    let mut config = zenoh::config::default();
+    config.set_connect(ConnectConfig {
+        endpoints: vec![EndPoint::from_str(&routerip).expect("router IpAddr error!")],
+    });
+    let session = zenoh::open(config).await.unwrap();
+    session
 }

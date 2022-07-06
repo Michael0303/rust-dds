@@ -20,7 +20,7 @@ async fn main() {
     let mut subscriber = session.subscribe("/key/robot_msg").await.unwrap();
     while let Some(msg) = subscriber.next().await {
         let msg_bytes = msg.value.payload.contiguous().as_ref().to_owned();
-        let msg = rmp_serde::from_read(&*msg_bytes).unwrap();
-        println!("Received : {:#?}", msg);
+        let msg = decode(msg_bytes);
+        println!("{:#?}", msg);
     }
 }
